@@ -4,6 +4,8 @@ import com.michael.contactlist.bean.ContactInfo;
 import com.michael.contactlist.bean.User;
 import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
+import org.nutz.dao.Sqls;
+import org.nutz.dao.sql.Sql;
 import org.nutz.lang.util.NutMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,6 +35,14 @@ public class ContactListController {
     @Autowired
     Dao dao;
 
+
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public Object register(@RequestBody User user) {
+        log.info(user.getUsername() + "i am here" + user.getPassword());
+        dao.insert(user);
+        return new NutMap().setv("user", user);
+    }
+
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public Object login(@RequestBody User user) {
         log.info(user.getUsername() + "i am here" + user.getPassword());
@@ -46,21 +55,29 @@ public class ContactListController {
     public Object init(@RequestBody User user) {
         log.info("user: {}", user);
         user = dao.fetch(user);
-        String context = user.getContext();
-        String[] contextArr = context.split(",");
-        List<ContactInfo> contactInfos = new ArrayList<>();
-        for (int i = 0; i < contextArr.length; i += 2) {
-            contactInfos.add(new ContactInfo(contextArr[i], contextArr[i + 1]));
-        }
+        Sql queryLinkManSql = Sqls.create("select * from t_link_man l,t_user u where u.id = l.belong and u.id=@id");
+        queryLinkManSql.params().set("id", user.getId());
+        queryLinkManSql.setCallback(Sqls.callback.entities());
+        queryLinkManSql.setEntity(dao.getEntity(ContactInfo.class));
+        dao.execute(queryLinkManSql);
+        List<ContactInfo> contactInfos = queryLinkManSql.getList(ContactInfo.class);
         return new NutMap().setv("contactList", contactInfos).setv("user", user);
     }
 
     @RequestMapping(value = "addLinkMan", method = RequestMethod.POST)
     public Object addLinkMan(@RequestBody ContactInfo contactInfo) {
-        User user = dao.fetch(User.class, contactInfo.getUserId());
-        user.setContext(user.getContext() + ',' + contactInfo.getContactName() + ',' + contactInfo.getPhoneNum());
-        dao.update(user);
+        dao.insert(contactInfo);
         return new NutMap().setv("flag", true);
+    }
+
+    /**
+     * create table
+     */
+    public void createTable(){
+        dao.drop(User.class);
+        dao.drop(ContactInfo.class);
+        dao.create(User.class, false);
+        dao.create(ContactInfo.class, false);
     }
 
 }

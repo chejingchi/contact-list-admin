@@ -3,6 +3,9 @@ package com.michael.contactlist.bean;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.nutz.dao.entity.annotation.Column;
+import org.nutz.dao.entity.annotation.Id;
+import org.nutz.dao.entity.annotation.Table;
 
 /**
  * @author chejingchi
@@ -16,14 +19,23 @@ import lombok.ToString;
 @Data
 @ToString
 @NoArgsConstructor
+@Table("t_link_man")
 public class ContactInfo {
+    @Id
+    private int id;
 
+    @Column("username")
     private String contactName;
 
+    @Column("telephone")
     private String phoneNum;
 
     private boolean active = false;
 
+    @Column
+    private char sex;
+
+    @Column("belong")
     private int userId;
 
     public ContactInfo(String contactName, String phoneNum, int userId) {
