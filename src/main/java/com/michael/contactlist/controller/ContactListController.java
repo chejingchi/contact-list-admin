@@ -70,10 +70,23 @@ public class ContactListController {
         return new NutMap().setv("flag", true);
     }
 
+    @RequestMapping(value = "deleteLinkMan", method = RequestMethod.POST)
+    public Object deleteLinkMan(@RequestBody ContactInfo contactInfo) {
+        boolean flag;
+        try {
+            dao.delete(contactInfo);
+            flag = true;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            flag = false;
+        }
+        return new NutMap().setv("flag", flag);
+    }
+
     /**
      * create table
      */
-    public void createTable(){
+    public void createTable() {
         dao.drop(User.class);
         dao.drop(ContactInfo.class);
         dao.create(User.class, false);
