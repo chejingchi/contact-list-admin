@@ -84,13 +84,15 @@ public class ContactListController {
     }
 
     /**
-     * create table
+     * 重建表 如有新加表请记得新增
      */
-    public void createTable() {
+    @RequestMapping(value = "createTable", method = RequestMethod.GET)
+    public Object createTable() {
         dao.drop(User.class);
         dao.drop(ContactInfo.class);
         dao.create(User.class, false);
         dao.create(ContactInfo.class, false);
+        return new NutMap().setv("flag", true);
     }
 
 }
