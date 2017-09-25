@@ -30,7 +30,7 @@ public class YysjController {
     /**
      * 查询--剩余时间段
      */
-    @RequestMapping(value = "queryYysjList",method = RequestMethod.POST)
+    @RequestMapping(value = "queryYysjList",method = RequestMethod.GET)
     @ResponseBody
     public Object queryYysjList(String jlfid, String yyrq) {
         NutMap queryInfo = new NutMap().setv("jlfid", jlfid).setv("yyrq", yyrq);

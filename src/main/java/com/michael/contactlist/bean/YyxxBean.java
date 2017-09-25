@@ -1,6 +1,8 @@
 package com.michael.contactlist.bean;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.nutz.dao.entity.annotation.Column;
 import org.nutz.dao.entity.annotation.Table;
 
@@ -13,8 +15,10 @@ import org.nutz.dao.entity.annotation.Table;
  * @since JDK 1.8
  * 类说明:
  */
-@Table("YyxxBean")
+@Table("T_LRB_YYXX")
 @Data
+@NoArgsConstructor
+@ToString
 public class YyxxBean {
     @Column
     private String fid;

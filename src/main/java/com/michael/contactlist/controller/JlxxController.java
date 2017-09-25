@@ -27,7 +27,7 @@ public class JlxxController {
     JlxxService service;
 
 
-    @RequestMapping(value = "/queryJlList",method = RequestMethod.POST)
+    @RequestMapping(value = "/queryJlList",method = RequestMethod.GET)
     public Object queryJlList() {
         List<Trainer> trainerList = service.queryJlList();
         return new NutMap().setv("success", true).setv("data", trainerList);
