@@ -27,18 +27,19 @@ public class YyxxController {
 
     /**
      * 入库--新增
+     *
      * @param yyxxBean
      * @return
      */
-    @RequestMapping(value = "addYyxx",method = RequestMethod.POST)
+    @RequestMapping(value = "addYyxx", method = RequestMethod.POST)
     @ResponseBody
-    public String addYyxx(@RequestBody YyxxBean yyxxBean){
+    public String addYyxx(@RequestBody YyxxBean yyxxBean) {
         //查询是否已预约
         int count = service.queryIsYy(yyxxBean);
-        if(0==count){
+        if (0 == count) {
             service.addYyxx(yyxxBean);
             return "预约成功";
-        }else{
+        } else {
             return "已预约";
         }
     }
@@ -46,9 +47,9 @@ public class YyxxController {
     /**
      * 查询--根据会员姓名查询我的预约
      */
-    @RequestMapping(value = "queryByHyxm",method = RequestMethod.POST)
+    @RequestMapping(value = "queryByHyxm", method = RequestMethod.POST)
     @ResponseBody
-    public Object queryByHyxm(@RequestBody String hymc){
+    public Object queryByHyxm(@RequestBody String hymc) {
         NutMap resultMap = new NutMap();
         try {
             List<YyxxBean> listYyxx = service.queryByHyxm(hymc);
@@ -67,7 +68,7 @@ public class YyxxController {
      */
     @RequestMapping("queryAllYyxx")
     @ResponseBody
-    public HashMap<String,Object> queryAllYyxx(){
+    public HashMap<String, Object> queryAllYyxx() {
         NutMap resultMap = new NutMap();
         try {
             List<YyxxBean> listYyxx = service.queryAllYyxx();
@@ -88,7 +89,7 @@ public class YyxxController {
      */
     @RequestMapping("delMyyyByFid")
     @ResponseBody
-    public String delMyyyByFid(@RequestBody String fid){
+    public String delMyyyByFid(@RequestBody String fid) {
         service.delMyyyByFid(fid);
         return "取消成功";
     }
