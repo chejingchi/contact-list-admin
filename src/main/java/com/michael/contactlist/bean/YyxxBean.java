@@ -3,8 +3,7 @@ package com.michael.contactlist.bean;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.nutz.dao.entity.annotation.Column;
-import org.nutz.dao.entity.annotation.Table;
+import org.nutz.dao.entity.annotation.*;
 
 /**
  * @author chejingchi
@@ -20,8 +19,10 @@ import org.nutz.dao.entity.annotation.Table;
 @NoArgsConstructor
 @ToString
 public class YyxxBean {
-    @Column
+    @Name
+    @Prev(els=@EL("uuid()"))
     private String fid;
+
     @Column
     private String jlfid;
 
