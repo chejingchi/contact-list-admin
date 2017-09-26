@@ -37,8 +37,35 @@ public class YyxxService {
     }
 
     public List<YyxxBean> queryByHyxm(String hymc) {
-        Cnd condition = Cnd.where("hymc", "=", hymc);
-        List<YyxxBean> yyxxBeanList = dao.query(YyxxBean.class, condition);
+        String queryByName = "\n" +
+                "SELECT \n" +
+                "    a.*,\n" +
+                "    b.JLMC,\n" +
+                "    c.yysj yysjmc,\n" +
+                "    CASE\n" +
+                "        WHEN\n" +
+                "            a.YYRQ = DATE_FORMAT(SYSDATE(), '%Y-%m-%d')\n" +
+                "                AND (SUBSTR(c.yysj, 0, 2) - DATE_FORMAT(SYSDATE(), '%H')) < 2\n" +
+                "                AND (SUBSTR(c.yysj, 0, 2) - DATE_FORMAT(SYSDATE(), '%H')) > 0\n" +
+                "        THEN\n" +
+                "            0\n" +
+                "        ELSE 1\n" +
+                "    END ISQX\n" +
+                "FROM\n" +
+                "    T_LRB_YYXX a\n" +
+                "        LEFT JOIN\n" +
+                "    T_LRB_LJXX b ON b.FID = a.JLFID\n" +
+                "        LEFT JOIN\n" +
+                "    T_LRB_YYSJ c ON c.FID = a.YYsj\n" +
+                "WHERE\n" +
+                "    a.HYXM = '啊哈哈哈。。。'\n" +
+                "        AND a.YYRQ >= date_format(SYSDATE(),'%Y-%m-%d');";
+        Sql queryByNameSql = Sqls.create(queryByName);
+        queryByNameSql.params().set("hymc", hymc);
+        queryByNameSql.setCallback(Sqls.callback.entities());
+        queryByNameSql.setEntity(dao.getEntity(YyxxBean.class));
+        dao.execute(queryByNameSql);
+        List<YyxxBean> yyxxBeanList = queryByNameSql.getList(YyxxBean.class);
         return yyxxBeanList;
     }
 
