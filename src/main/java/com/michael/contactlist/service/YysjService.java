@@ -24,13 +24,9 @@ public class YysjService {
     @Autowired
     Dao dao;
 
-    Sql queryYYsjSql = Sqls.create("SELECT * FROM T_LRB_YYSJ \n" +
-            "\t\tWHERE FID NOT IN \n" +
-            "\t\t(SELECT YYSJ FROM T_LRB_YYXX WHERE JLFID=@id AND YYRQ =@time)\n" +
-            "\t\tORDER BY FID;");
-
 
     public List<YysjBean> queryYysjList(NutMap queryInfo) {
+        Sql queryYYsjSql = Sqls.create(dao.sqls().get("queryYYsj"));
         queryYYsjSql.params()
                 .set("id", queryInfo.getString("jlfid"))
                 .set("time", queryInfo.getString("yyrq"));
