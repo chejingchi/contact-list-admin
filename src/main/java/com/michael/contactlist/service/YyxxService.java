@@ -5,9 +5,14 @@ import org.nutz.dao.Cnd;
 import org.nutz.dao.Dao;
 import org.nutz.dao.Sqls;
 import org.nutz.dao.sql.Sql;
+import org.nutz.dao.sql.SqlCallback;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -62,11 +67,8 @@ public class YyxxService {
                 "        AND a.YYRQ >= date_format(SYSDATE(),'%Y-%m-%d');";
         Sql queryByNameSql = Sqls.create(queryByName);
         queryByNameSql.params().set("hymc", hymc);
-        queryByNameSql.setCallback(Sqls.callback.entities());
-        queryByNameSql.setEntity(dao.getEntity(YyxxBean.class));
-        dao.execute(queryByNameSql);
-        List<YyxxBean> yyxxBeanList = queryByNameSql.getList(YyxxBean.class);
-        return yyxxBeanList;
+        List<YyxxBean> retList = getYyxxBeans(queryByNameSql, false);
+        return retList;
     }
 
     public List<YyxxBean> queryAllYyxx() {
@@ -78,12 +80,39 @@ public class YyxxService {
                 "\t\tLEFT JOIN t_lrb_hyxx d ON d.FID = a.HYXM\n" +
                 "\t\twhere a.YYRQ >=date_format(SYSDATE(),'%Y-%m-%d')\n" +
                 "\t\tORDER BY a.YYRQ,b.JLMC";
-        Sql queryAllYyxx = Sqls.create(queryAllYyxxStr);
-        queryAllYyxx.setCallback(Sqls.callback.entities());
-        queryAllYyxx.setEntity(dao.getEntity(YyxxBean.class));
-        dao.execute(queryAllYyxx);
-        List<YyxxBean> retList = queryAllYyxx.getList(YyxxBean.class);
+        Sql queryAllYyxxSql = Sqls.create(queryAllYyxxStr);
+        List<YyxxBean> retList = getYyxxBeans(queryAllYyxxSql, true);
         return retList;
+    }
+
+    private List<YyxxBean> getYyxxBeans(Sql sql, final boolean flag) {
+        sql.setCallback(new SqlCallback() {
+            @Override
+            public Object invoke(Connection connection, ResultSet resultSet, Sql sql) throws SQLException {
+                List<YyxxBean> retList = new ArrayList();
+                YyxxBean tmp = null;
+                while (resultSet.next()) {
+                    tmp = new YyxxBean();
+                    tmp.setFid(resultSet.getString("FID"));
+                    tmp.setHyxm(resultSet.getString("HYXM"));
+                    tmp.setYyrq(resultSet.getString("YYRQ"));
+                    tmp.setJlmc(resultSet.getString("JLMC"));
+                    tmp.setYysjmc(resultSet.getString("YYSJMC"));
+                    if (flag) {
+                        tmp.setBz(resultSet.getString("bz"));
+                    } else {
+                        tmp.setIsqx(resultSet.getString("ISQX"));
+                        tmp.setJlfid(resultSet.getString("jlfid"));
+                        tmp.setYysj(resultSet.getString("yysj"));
+
+                    }
+                    retList.add(tmp);
+                }
+                return retList;
+            }
+        });
+        dao.execute(sql);
+        return sql.getList(YyxxBean.class);
     }
 
     public void delMyyyByFid(String fid) {

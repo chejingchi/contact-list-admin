@@ -26,7 +26,6 @@ public class YyxxBean {
     @Column
     private String jlfid;
 
-    @Column
     private String jlmc;
     @Column
     private String hyxm;
@@ -35,13 +34,10 @@ public class YyxxBean {
     @Column
     private String yysj;
 
-    @Column
     private String yysjmc;
     /**0:不可取消；1：可取消**/
-    @Column
     private String isqx;
     /**会员备注**/
-    @Column
     private String bz;
 
 }
