@@ -49,10 +49,10 @@ public class YyxxController {
      */
     @RequestMapping(value = "queryByHyxm", method = RequestMethod.POST)
     @ResponseBody
-    public Object queryByHyxm(@RequestBody String hymc) {
+    public Object queryByHyxm(@RequestBody YyxxBean bean) {
         NutMap resultMap = new NutMap();
         try {
-            List<YyxxBean> listYyxx = service.queryByHyxm(hymc);
+            List<YyxxBean> listYyxx = service.queryByHyxm(bean.getHyxm());
             resultMap.setv("success", true).setv("data", listYyxx);
 
         } catch (Exception e) {
