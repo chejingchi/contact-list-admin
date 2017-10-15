@@ -63,7 +63,7 @@ public class YyxxService {
                 "        LEFT JOIN\n" +
                 "    T_LRB_YYSJ c ON c.FID = a.YYsj\n" +
                 "WHERE\n" +
-                "    a.HYXM = '啊哈哈哈。。。'\n" +
+                "    a.HYXM = @hymc\n" +
                 "        AND a.YYRQ >= date_format(SYSDATE(),'%Y-%m-%d');";
         Sql queryByNameSql = Sqls.create(queryByName);
         queryByNameSql.params().set("hymc", hymc);
