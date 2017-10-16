@@ -89,8 +89,8 @@ public class YyxxController {
      */
     @RequestMapping("delMyyyByFid")
     @ResponseBody
-    public String delMyyyByFid(@RequestBody String fid) {
-        service.delMyyyByFid(fid);
+    public String delMyyyByFid(@RequestBody YyxxBean bean) {
+        service.delMyyyByFid(bean.getFid());
         return "取消成功";
     }
 
