@@ -43,9 +43,8 @@ public class YysjController {
         } catch (Exception e) {
             e.printStackTrace();
             resultMap.setv("success", false).setv("data", "");
-        } finally {
-            return resultMap;
         }
+        return resultMap;
 
     }
 }
