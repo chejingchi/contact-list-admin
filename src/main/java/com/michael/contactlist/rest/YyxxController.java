@@ -1,4 +1,4 @@
-package com.michael.contactlist.controller;
+package com.michael.contactlist.rest;
 
 import com.michael.contactlist.bean.YyxxBean;
 import com.michael.contactlist.service.YyxxService;
@@ -32,7 +32,6 @@ public class YyxxController {
      * @return
      */
     @RequestMapping(value = "addYyxx", method = RequestMethod.POST)
-    @ResponseBody
     public String addYyxx(@RequestBody YyxxBean yyxxBean) {
         //查询是否已预约
         int count = service.queryIsYy(yyxxBean);
@@ -48,7 +47,6 @@ public class YyxxController {
      * 查询--根据会员姓名查询我的预约
      */
     @RequestMapping(value = "queryByHyxm", method = RequestMethod.POST)
-    @ResponseBody
     public Object queryByHyxm(@RequestBody YyxxBean bean) {
         NutMap resultMap = new NutMap();
         try {
@@ -67,7 +65,6 @@ public class YyxxController {
      * 查询--所有会员预约
      */
     @RequestMapping("queryAllYyxx")
-    @ResponseBody
     public HashMap<String, Object> queryAllYyxx() {
         NutMap resultMap = new NutMap();
         try {
@@ -88,7 +85,6 @@ public class YyxxController {
      * 入库--取消预约
      */
     @RequestMapping("delMyyyByFid")
-    @ResponseBody
     public String delMyyyByFid(@RequestBody YyxxBean bean) {
         service.delMyyyByFid(bean.getFid());
         return "取消成功";

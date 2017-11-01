@@ -1,4 +1,4 @@
-package com.michael.contactlist.controller;
+package com.michael.contactlist.rest;
 
 import com.michael.contactlist.bean.Trainer;
 import com.michael.contactlist.service.JlxxService;
